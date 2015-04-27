@@ -86,7 +86,7 @@ void SFApp::OnUpdateWorld() {
   }
 
   for(auto c: coins) {
-    c->GoSouth();
+    c->GoNorth();
 
     //check collision with coins
     if(player->CollidesWith(c)) {
@@ -107,6 +107,15 @@ void SFApp::OnUpdateWorld() {
 	cout << "Emeny has been terminated!" << endl;
         p->HandleCollision();
         a->HandleCollision();
+      }
+    }
+  }
+  for(auto p : projectiles) {
+    for(auto c : coins) {
+      if(p->CollidesWith(c)) {
+	cout << "Coin Collected!" << endl;
+	p->HandleCollision();
+	c->HandleCollision();
       }
     }
   }
