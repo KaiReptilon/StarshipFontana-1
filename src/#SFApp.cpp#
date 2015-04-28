@@ -80,7 +80,7 @@ void SFApp::OnUpdateWorld() {
     
     auto p_pos = p->GetPosition();
 
-    if(p_pos.getY()-2.0 > h) {
+    if(p_pos.getY() > h) {
       p->HandleCollision();
     }
   }
