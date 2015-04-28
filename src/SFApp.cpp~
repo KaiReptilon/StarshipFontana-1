@@ -14,7 +14,7 @@ SFApp::SFApp(std::shared_ptr<SFWindow> window) : fire(0), is_running(true), sf_w
   for(int i=0; i<number_of_aliens; i++) {
     // place an alien at width/number_of_aliens * i
     auto alien = make_shared<SFAsset>(SFASSET_ALIEN, sf_window);
-    auto pos   = Point2((canvas_w/number_of_aliens) * i + 48.0f, 300.0f);
+    auto pos   = Point2(rand() %600 + 32, rand() % 400 + 600);
     alien->SetPosition(pos);
     alien->SetHealth(100);
     aliens.push_back(alien);
@@ -81,6 +81,11 @@ void SFApp::OnUpdateWorld() {
 
   // Update projectile positions
 
+	if(player->GetHealth() <= 0){
+  	cout << "GAME OVER!" << endl;
+  	is_running = false;
+	}
+
   for(auto p: projectiles) {
     p->GoNorth();
     
@@ -106,16 +111,14 @@ void SFApp::OnUpdateWorld() {
   // Update enemy positions
   for(auto a : aliens) {
     a->GoSouth();
+
     if(player->CollidesWith(a)) {
       player->SetHealth(player->GetHealth() - 50);
-      if(a->HandleCollision() == 1){
-	enemiesKilled++;
-      }
+	
+			a->SetNotAlive();
+			enemiesKilled++;
+
       cout << "You were hit! Remaining HP" << player->GetHealth() << endl;
- 		if(player->GetHealth() <= 0){
-    	cout << "GAME OVER!" << endl;
-    	is_running = false;
-  		}
 		}
 	}
 
@@ -125,7 +128,18 @@ void SFApp::OnUpdateWorld() {
     for(auto p : projectiles) {
       if(p->CollidesWith(a)) {
         p->HandleCollision();
-	enemiesKilled++;
+				a->HandleCollision();
+
+				if(this->GetHealth() <= 0){
+					int canvas_w, canvas_h;
+					SDL_GetRendererOutputSize(sf_window->getRenderer(), &canvas_w, &canvas_h);
+
+					auto pos = Point2(rand() % 600 + 32, rand() % 400 + 600);
+
+					a->SetPosition(pos);	
+
+					enemiesKilled++;
+				}
       }
     }
   }
