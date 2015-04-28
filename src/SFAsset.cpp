@@ -212,8 +212,17 @@ int SFAsset::HandleCollision() {
 		SDL_GetRendererOutputSize(sf_window->getRenderer(), &canvas_w, &canvas_h);
 		auto pos = Point2(rand() % 600 + 32, rand() % 400 + 600);
 		this->SetPosition(pos);
+		return 1;
 	}
 
 	return 0;
   
+}
+
+int SFAsset::GetScore() {
+ return PlayerScore;
+}
+void SFAsset::SetScore(int val) {
+	this->PlayerScore = val;
+	cout << "Set score to: " << val << endl;
 }

@@ -102,8 +102,11 @@ void SFApp::OnUpdateWorld() {
 
     //check collision with coins
     if(player->CollidesWith(c)) {
-      c->HandleCollision();
-      cout << "Coin Collected!" << endl;
+      if(c->HandleCollision() == 1){
+      	cout << "Coin Collected!" << endl;
+				player->SetScore(player->GetScore() +100);
+				cout << "Your score: " << player -> GetScore() << endl;
+			}
     }
   }
 
@@ -114,11 +117,13 @@ void SFApp::OnUpdateWorld() {
 
     if(player->CollidesWith(a)) {
       player->SetHealth(player->GetHealth() - 50);
+			player->SetScore(player->GetScore() - 10);
 	
 			a->SetNotAlive();
 			enemiesKilled++;
 
       cout << "You were hit! Remaining HP" << player->GetHealth() << endl;
+			cout << "Your score: " << player -> GetScore() << endl;
 		}
 	}
 
@@ -139,6 +144,8 @@ void SFApp::OnUpdateWorld() {
 					a->SetPosition(pos);	
 
 					enemiesKilled++;
+					player->SetScore(player->GetScore() + 10);
+					cout << "Your score: " << player -> GetScore() << endl;
 				}
       }
     }
@@ -148,6 +155,8 @@ void SFApp::OnUpdateWorld() {
     for(auto c : coins) {
       if(p->CollidesWith(c)) {
 	cout << "Coin Collected!" << endl;
+	player->SetScore(player->GetScore() + 200);
+	cout << "Your score: " << player -> GetScore() << endl;
 	p->HandleCollision();
 	c->HandleCollision();
       }
