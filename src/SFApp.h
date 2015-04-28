@@ -40,5 +40,6 @@ private:
   list<shared_ptr<SFAsset> > coins;
 
   int fire;
+  int enemiesKilled;
 };
 #endif

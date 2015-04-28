@@ -87,6 +87,7 @@ void SFApp::OnUpdateWorld() {
   SDL_GetRendererOutputSize(sf_window->getRenderer(), &w, &h);
 
   // Update projectile positions
+
   for(auto p: projectiles) {
     p->GoNorth();
     
@@ -96,6 +97,7 @@ void SFApp::OnUpdateWorld() {
       p->HandleCollision();
     }
   }
+
 
   for(auto c: coins) {
     c->GoNorth();
@@ -107,22 +109,30 @@ void SFApp::OnUpdateWorld() {
     }
   }
 
+
   // Update enemy positions
   for(auto a : aliens) {
     a->GoSouth();
-    // do something here
+    if(player->CollidesWith(a)) {
+      player->SetHealth(player->GetHealth() - 50);
+      if(a->HandleCollision() == 1){
+	enemiesKilled++;
+      }
+      cout << "You were hit! Remaining HP" << player->GetHealth() << endl;
+    }
   }
 
+
   // Detect collisions
-  for(auto p : projectiles) {
-    for(auto a : aliens) {
+  for(auto a : aliens) {
+    for(auto p : projectiles) {
       if(p->CollidesWith(a)) {
-	cout << "Emeny has been terminated!" << endl;
         p->HandleCollision();
-        a->HandleCollision();
+	enemiesKilled++;
       }
     }
   }
+
   for(auto p : projectiles) {
     for(auto c : coins) {
       if(p->CollidesWith(c)) {

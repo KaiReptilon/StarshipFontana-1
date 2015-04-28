@@ -39,7 +39,7 @@ public:
   virtual void      GoSouth();
   virtual void      SetNotAlive();
   virtual bool      IsAlive();
-  virtual void      HandleCollision();
+  virtual int       HandleCollision();
   virtual int       GetHealth();
   virtual void      SetHealth(int val);
 

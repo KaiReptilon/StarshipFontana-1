@@ -119,6 +119,7 @@ void SFAsset::GoEast() {
     bbox->centre = make_shared<Vector2>(c);
   }
 }
+
 void SFAsset::GoNorth() {
   int w, h;
   SDL_GetRendererOutputSize(sf_window->getRenderer(), &w, &h);
@@ -156,12 +157,7 @@ bool SFAsset::IsAlive() {
 }
 
 int SFAsset::HandleCollision() {
-  if(SFASSET_PROJECTILE == type || SFASSET_COIN == type) {
+  if(SFASSET_PROJECTILE == type || SFASSET_ALIEN == type || SFASSET_COIN == type) {
     SetNotAlive();
   }
-  if(SFASSET_ALIEN == type){
-    SetNotAlive();
-    return 1;
-  }
-  return 0;
 }
