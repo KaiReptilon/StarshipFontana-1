@@ -8,6 +8,7 @@ SFApp::SFApp(std::shared_ptr<SFWindow> window) : fire(0), is_running(true), sf_w
   player  = make_shared<SFAsset>(SFASSET_PLAYER, sf_window);
   auto player_pos = Point2(canvas_w/2.0f, 88.0f);
   player->SetPosition(player_pos);
+  player->SetHealth(500);
 
   const int number_of_aliens = 3;
   for(int i=0; i<number_of_aliens; i++) {
@@ -15,6 +16,7 @@ SFApp::SFApp(std::shared_ptr<SFWindow> window) : fire(0), is_running(true), sf_w
     auto alien = make_shared<SFAsset>(SFASSET_ALIEN, sf_window);
     auto pos   = Point2((canvas_w/number_of_aliens) * i + 48.0f, 300.0f);
     alien->SetPosition(pos);
+    alien->SetHealth(100);
     aliens.push_back(alien);
   }
 
@@ -22,6 +24,8 @@ SFApp::SFApp(std::shared_ptr<SFWindow> window) : fire(0), is_running(true), sf_w
   auto pos  = Point2((canvas_w/4), 100);
   coin->SetPosition(pos);
   coins.push_back(coin);
+
+  cout << "You have" << player->GetHealth() << " HP." << endl;
 }
 
 SFApp::~SFApp() {
@@ -70,17 +74,25 @@ int SFApp::OnExecute() {
     OnEvent(sfevent);
   }
 }
+void SFApp::EndGame(){
+ if(player->GetHealth() <= 0){
+    cout << "GAME OVER!" << endl;
+    EndGame();
+    is_running = false;
+  }
+}
 
 void SFApp::OnUpdateWorld() {
   int w, h;
   SDL_GetRendererOutputSize(sf_window->getRenderer(), &w, &h);
+
   // Update projectile positions
   for(auto p: projectiles) {
     p->GoNorth();
     
     auto p_pos = p->GetPosition();
 
-    if(p_pos.getY()-2.0 > h) {
+    if(p_pos.getY() > h) {
       p->HandleCollision();
     }
   }
@@ -97,6 +109,7 @@ void SFApp::OnUpdateWorld() {
 
   // Update enemy positions
   for(auto a : aliens) {
+    a->GoSouth();
     // do something here
   }
 
@@ -169,6 +182,8 @@ void SFApp::OnRender() {
   for(auto c: coins) {
     if(c->IsAlive()){c->OnRender();}
   }
+
+
 
   // Switch the off-screen buffer to be on-screen
   SDL_RenderPresent(sf_window->getRenderer());

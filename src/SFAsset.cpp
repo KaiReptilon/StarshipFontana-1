@@ -78,6 +78,14 @@ SFAssetId SFAsset::GetId() {
   return id;
 }
 
+int SFAsset::GetHealth() {
+  return objHP;
+}
+
+void SFAsset::SetHealth(int val) {
+  this->objHP = val;
+}
+
 void SFAsset::OnRender() {
   // 1. Get the SDL_Rect from SFBoundingBox
   SDL_Rect rect;

@@ -27,6 +27,7 @@ public:
   void    OnRender();
 
   void    FireProjectile();
+  void    EndGame();
 private:
   bool                    is_running;
 
