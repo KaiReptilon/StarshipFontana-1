@@ -25,6 +25,9 @@ SFApp::SFApp(std::shared_ptr<SFWindow> window) : fire(0), is_running(true), sf_w
   coin->SetPosition(pos);
   coins.push_back(coin);
 
+
+
+  cout << "Collect as many points as possible without dieing" << endl;
 }
 
 
